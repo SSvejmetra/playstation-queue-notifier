@@ -1,0 +1,42 @@
+version: '3.8'
+
+networks:
+  dock:
+    driver: bridge
+
+volumes:
+  dock-mysql:
+      driver: local
+
+services:
+
+  php:
+    build:
+      context: .
+      dockerfile: .docker/php.dockerfile
+    ports:
+      - 8080:80
+    volumes:
+      - .:/app
+    networks:
+      - dock
+
+  mysql:
+    image: 'mysql:8.0'
+    ports:
+        - '${FORWARD_DB_PORT:-3306}:3306'
+    environment:
+        MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
+        MYSQL_DATABASE: '${DB_DATABASE}'
+        MYSQL_USER: '${DB_USERNAME}'
+        MYSQL_PASSWORD: '${DB_PASSWORD}'
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+        - 'dock-mysql:/var/lib/mysql'
+    networks:
+        - dock
+    healthcheck:
+        test: [ "CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}" ]
+        retries: 3
+        timeout: 5s
+
