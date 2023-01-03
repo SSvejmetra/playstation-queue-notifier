@@ -22,6 +22,18 @@ services:
         networks:
             - dock
 
+    schedule:
+        build:
+            context: .
+            dockerfile: .docker/php.dockerfile
+        restart: unless-stopped
+        command:
+            - "schedule:work"
+        volumes:
+            - .:/app
+        networks:
+            - dock
+
     worker:
         build:
             context: .
