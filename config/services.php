@@ -35,4 +35,7 @@ return [
         'url' => env('SONY_CENTER_URL'),
     ],
 
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN'),
+    ],
 ];
