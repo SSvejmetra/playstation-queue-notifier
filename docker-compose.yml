@@ -29,7 +29,7 @@ services:
         restart: unless-stopped
         command:
             - "queue:listen"
-            - "--queue=playstation"
+            - "--queue=app,playstation,notifications"
         volumes:
             - .:/app
         networks:
